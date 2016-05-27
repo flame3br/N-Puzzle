@@ -37,6 +37,15 @@
 )
 ;_________________________________________________________________
 
+; Função para imprimir lista de tabuleiros
+(define (imprimeTabuleiros tabuleiros)
+    (if (null? tabuleiros)
+        null
+        (and (and (imprime (car tabuleiros)) (display "\n")) (imprimeTabuleiros (cdr tabuleiros)))
+    )
+)
+;_________________________________________________________________
+
 ; Função que retorna o índice da posição vazia.
 (define (posicaoVazia tabuleiro tamanho [i 0])
     (if (>= (contemPosicaoVazia (car tabuleiro) i) 0)
@@ -192,4 +201,4 @@
 )
 ;_________________________________________________________________
 ; Main
-;(sucessores '((2 1 0) (3 4 5) (6 7 8)) 3)
+(imprimeTabuleiros (sucessores '((0 1 2) (3 4 5) (6 7 8)) 3))
