@@ -7,11 +7,9 @@
 
 ;_________________________________________________________________
 
-; Função que realiza o algoritmo.
-(define (busca tabuleiro tamanho)
+; Função que realiza o jogo.
+(define (jogo tabuleiro tamanho)
     (imprime tabuleiro)
-    ;(pecasErradas tabuleiro tamanho)
-    ;(movimenta tabuleiro tamanho 4 (posicaoVazia tabuleiro tamanho))
 )
 ;_________________________________________________________________
 
@@ -200,5 +198,33 @@
     )
 )
 ;_________________________________________________________________
+
+; Função que cria um tabuleiro aleatório
+(define (geraTabuleiro tamanho)
+    (random (* tamanho tamanho))
+)
+;_________________________________________________________________
+
+; Função que retorna um índice de um valor
+(define (indiceValor tabuleiro tamanho valor [i 0])
+    (if (null? tabuleiro)
+        -1
+        (if (>= (indiceValorLinha (car tabuleiro) valor i) 0)
+            (indiceValorLinha (car tabuleiro) valor i)
+            (indiceValor (cdr tabuleiro) tamanho valor (+ i tamanho))
+        )
+    )
+)
+
+(define (indiceValorLinha linha valor i)
+    (if (null? linha)
+        -1
+        (if (= valor (car linha))
+            i
+            (indiceValorLinha (cdr linha) valor (+ i 1))
+        )
+    )
+)
+;_________________________________________________________________
 ; Main
-(imprimeTabuleiros (sucessores '((0 1 2) (3 4 5) (6 7 8)) 3))
+;(geraTabuleiro 3)
