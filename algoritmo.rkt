@@ -9,7 +9,7 @@
 ; tabuleiro => lista de listas, representando o tabuleiro.
 ; tamanho => valor N, tamanho do tabuleiro NxN.
 (define (busca tabuleiro tamanho)
-    (imprime tabuleiro)
+
 )
 
 ; Função para imprimir um tabuleiro.
@@ -34,7 +34,27 @@
     )
 )
 
+; Função que retorna o índice da posição vazia.
+; tabuleiro => lista de listas, representando o tabuleiro.
+; i => Indíce auxiliar, valor default = 0.
+(define (posicaoVazia tabuleiro tamanho [i 0])
+    (if (>= (contemPosicaoVazia (car tabuleiro) i) 0)
+        (contemPosicaoVazia (car tabuleiro) i)
+        (posicaoVazia (cdr tabuleiro) tamanho (+ i tamanho))
+    )
+)
+
+(define (contemPosicaoVazia linha i)
+    (if (null? linha)
+        -1
+        (if (zero? (car linha))
+            i
+            (contemPosicaoVazia (cdr linha) (+ i 1))
+        )
+    )
+)
+
 ; Main
-(busca '((1 2 3) (4 5 6) (7 8 9)) 3)
-(busca '((1 2 3 4) (5 6 7 8) (9 10 11 12) (13 14 15 16)) 4)
-(busca '((1 2 3 4 5) (6 7 8 9 10) (11 12 13 14 15) (16 17 18 19 20) (21 22 23 24 25)) 5)
+(busca '((1 2 3) (4 5 6) (7 0 9)) 3)
+(busca '((0 2 3 4) (5 6 7 8) (9 10 11 12) (13 14 15 16)) 4)
+(busca '((1 2 3 4 5) (6 7 8 9 10) (11 12 13 14 15) (16 0 18 19 20) (21 22 23 24 25)) 5)
