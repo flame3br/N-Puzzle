@@ -126,13 +126,30 @@
 
 ; Função que escolhe um sucessor de acordo com a heurística
 (define (escolheSucessor tabuleiros tamanho)
-    (calculaSucessores tabuleiros tamanho)
+    (sucessorIndice tabuleiros (indiceMenorValor (calculaSucessores tabuleiros tamanho) (car (calculaSucessores tabuleiros tamanho))))
 )
 
 (define (calculaSucessores tabuleiros tamanho)
     (if (null? tabuleiros)
         null
         (append (list (pecasErradas (car tabuleiros) tamanho)) (calculaSucessores (cdr tabuleiros) tamanho))
+    )
+)
+
+(define (indiceMenorValor valores menorValor [indiceMenor 0] [i 0])
+    (if (null? valores)
+        indiceMenor
+        (if (< (car valores) menorValor)
+            (indiceMenorValor (cdr valores) (car valores) i (+ i 1))
+            (indiceMenorValor (cdr valores) menorValor indiceMenor (+ i 1))
+        )
+    )
+)
+
+(define (sucessorIndice tabuleiros indice [i 0])
+    (if (= indice i)
+        (car tabuleiros)
+        (sucessorIndice (cdr tabuleiros) indice (+ i 1))
     )
 )
 ;_________________________________________________________________
