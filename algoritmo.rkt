@@ -10,9 +10,9 @@
 ; Função que realiza o algoritmo.
 (define (busca tabuleiro tamanho)
     ;(posicaoVazia tabuleiro tamanho)
-    ;(imprime tabuleiro)
+    (imprime tabuleiro)
     ;(pecasErradas tabuleiro tamanho)
-    (movimenta tabuleiro tamanho 4 0)
+    ;(movimenta tabuleiro tamanho 4 6)
 )
 ;_________________________________________________________________
 
@@ -79,9 +79,31 @@
 
 ; Função que retorna um tabuleiro com um movimento realizado.
 (define (movimenta tabuleiro tamanho indice vazia)
-    null
+    (setValorIndice (setValorIndice tabuleiro tamanho vazia (valorIndice tabuleiro tamanho indice)) tamanho indice 0)
 )
 
+;_________________________________________________________________
+
+; Função que retorna um tabuleiro com um valor setado em uma possição.
+(define (setValorIndice tabuleiro tamanho indice valor [i 0])
+    (if (null? tabuleiro)
+        null
+        (append
+            (list(setValorIndiceLinha (car tabuleiro) indice valor i))
+            (setValorIndice (cdr tabuleiro) tamanho indice valor (+ i tamanho))
+        )
+    )
+)
+
+(define (setValorIndiceLinha linha indice valor i [novaLinha '()])
+    (if (null? linha)
+        novaLinha
+        (if (= indice i)
+            (append novaLinha (cons valor (setValorIndiceLinha (cdr linha) indice valor (+ i 1) novaLinha)))
+            (append novaLinha (cons (car linha) (setValorIndiceLinha (cdr linha) indice valor (+ i 1) novaLinha)))
+        )
+    )
+)
 ;_________________________________________________________________
 
 ; Função que retorna o valor de um índice.
