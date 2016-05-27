@@ -5,12 +5,14 @@
 ;;; Data: 01/06/2016
 #lang racket
 
-; Função que realizar o algoritmo.
+;_________________________________________________________________
+
+; Função que realiza o algoritmo.
 (define (busca tabuleiro tamanho)
-    ;Como usar as Funções:
     ;(posicaoVazia tabuleiro tamanho)
     ;(imprime tabuleiro)
-    (pecasErradas tabuleiro tamanho)
+    ;(pecasErradas tabuleiro tamanho)
+    (movimenta tabuleiro tamanho 4 0)
 )
 ;_________________________________________________________________
 
@@ -75,7 +77,33 @@
 
 ;_________________________________________________________________
 
+; Função que retorna um tabuleiro com um movimento realizado.
+(define (movimenta tabuleiro tamanho indice vazia)
+    null
+)
+
+;_________________________________________________________________
+
+; Função que retorna o valor de um índice.
+(define (valorIndice tabuleiro tamanho indice [i 0])
+    (if (>= (valorIndiceLinha (car tabuleiro) indice i) 0)
+        (valorIndiceLinha (car tabuleiro) indice i)
+        (valorIndice (cdr tabuleiro) tamanho indice (+ i tamanho))
+    )
+)
+
+(define (valorIndiceLinha linha indice i)
+    (if (null? linha)
+        -1
+        (if (= indice i)
+            (car linha)
+            (valorIndiceLinha (cdr linha) indice (+ i 1))
+        )
+    )
+)
+;_________________________________________________________________
+
 ; Main
 (busca '((0 1 2) (3 4 5) (6 7 8)) 3)
-;(busca '((0 1 2 3) (4 5 6 7) (8 9 10 11) (12 13 14 15)) 4)
-;(busca '((0 1 2 3 4) (5 6 7 8 9) (10 11 12 13 14) (15 16 17 18 19) (20 21 22 23 24)) 5)
+(busca '((0 1 2 3) (4 5 6 7) (8 9 10 11) (12 13 14 15)) 4)
+(busca '((0 1 2 3 4) (5 6 7 8 9) (10 11 12 13 14) (15 16 17 18 19) (20 21 22 23 24)) 5)
