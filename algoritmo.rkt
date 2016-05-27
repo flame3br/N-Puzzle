@@ -6,14 +6,15 @@
 #lang racket
 
 ; Função que realizar o algoritmo.
-; tabuleiro => lista de listas, representando o tabuleiro.
-; tamanho => valor N, tamanho do tabuleiro NxN.
 (define (busca tabuleiro tamanho)
-
+    ;Como usar as Funções:
+    ;(posicaoVazia tabuleiro tamanho)
+    ;(imprime tabuleiro)
+    (pecasErradas tabuleiro tamanho)
 )
+;_________________________________________________________________
 
 ; Função para imprimir um tabuleiro.
-; tabuleiro => lista de listas, representando o tabuleiro.
 (define (imprime tabuleiro)
     (if (null? tabuleiro)
         true
@@ -33,10 +34,9 @@
         )
     )
 )
+;_________________________________________________________________
 
 ; Função que retorna o índice da posição vazia.
-; tabuleiro => lista de listas, representando o tabuleiro.
-; i => Indíce auxiliar, valor default = 0.
 (define (posicaoVazia tabuleiro tamanho [i 0])
     (if (>= (contemPosicaoVazia (car tabuleiro) i) 0)
         (contemPosicaoVazia (car tabuleiro) i)
@@ -53,8 +53,29 @@
         )
     )
 )
+;_________________________________________________________________
+
+; Função que retorna a quantidade de peças erradas (heurística).
+(define (pecasErradas tabuleiro tamanho [i 0] [erradas 0])
+    (if (null? tabuleiro)
+        erradas
+        (pecasErradas (cdr tabuleiro) tamanho (+ i tamanho) (+ (pecasErradasLinha (car tabuleiro) i) erradas) )
+    )
+)
+
+(define (pecasErradasLinha linha i [erradas 0])
+    (if (null? linha)
+        erradas
+        (if (not (= i (car linha)))
+            (pecasErradasLinha (cdr linha) (+ i 1) (+ erradas 1))
+            (pecasErradasLinha (cdr linha) (+ i 1) erradas)
+        )
+    )
+)
+
+;_________________________________________________________________
 
 ; Main
-(busca '((1 2 3) (4 5 6) (7 0 9)) 3)
-(busca '((0 2 3 4) (5 6 7 8) (9 10 11 12) (13 14 15 16)) 4)
-(busca '((1 2 3 4 5) (6 7 8 9 10) (11 12 13 14 15) (16 0 18 19 20) (21 22 23 24 25)) 5)
+(busca '((0 1 2) (3 4 5) (6 7 8)) 3)
+;(busca '((0 1 2 3) (4 5 6 7) (8 9 10 11) (12 13 14 15)) 4)
+;(busca '((0 1 2 3 4) (5 6 7 8 9) (10 11 12 13 14) (15 16 17 18 19) (20 21 22 23 24)) 5)
