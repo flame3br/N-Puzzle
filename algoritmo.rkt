@@ -9,10 +9,9 @@
 
 ; Função que realiza o algoritmo.
 (define (busca tabuleiro tamanho)
-    ;(posicaoVazia tabuleiro tamanho)
-    (imprime tabuleiro)
+    ;(imprime tabuleiro)
     ;(pecasErradas tabuleiro tamanho)
-    ;(movimenta tabuleiro tamanho 4 6)
+    (movimenta tabuleiro tamanho 4 (posicaoVazia tabuleiro tamanho))
 )
 ;_________________________________________________________________
 
@@ -89,7 +88,7 @@
     (if (null? tabuleiro)
         null
         (append
-            (list(setValorIndiceLinha (car tabuleiro) indice valor i))
+            (list (setValorIndiceLinha (car tabuleiro) indice valor i))
             (setValorIndice (cdr tabuleiro) tamanho indice valor (+ i tamanho))
         )
     )
@@ -125,7 +124,21 @@
 )
 ;_________________________________________________________________
 
+; Função que escolhe um sucessor de acordo com a heurística
+(define (escolheSucessor tabuleiros tamanho)
+    (calculaSucessores tabuleiros tamanho)
+)
+
+(define (calculaSucessores tabuleiros tamanho)
+    (if (null? tabuleiros)
+        null
+        (append (list (pecasErradas (car tabuleiros) tamanho)) (calculaSucessores (cdr tabuleiros) tamanho))
+    )
+)
+;_________________________________________________________________
+
 ; Main
-(busca '((0 1 2) (3 4 5) (6 7 8)) 3)
-(busca '((0 1 2 3) (4 5 6 7) (8 9 10 11) (12 13 14 15)) 4)
-(busca '((0 1 2 3 4) (5 6 7 8 9) (10 11 12 13 14) (15 16 17 18 19) (20 21 22 23 24)) 5)
+;(busca '((0 1 2) (3 4 5) (6 7 8)) 3)
+;(busca '((0 1 2 3) (4 5 6 7) (8 9 10 11) (12 13 14 15)) 4)
+;(busca '((0 1 2 3 4) (5 6 7 8 9) (10 11 12 13 14) (15 16 17 18 19) (20 21 22 23 24)) 5)
+(escolheSucessor '(((0 1 2) (5 4 3) (6 7 8)) ((2 4 6) (0 1 3) (5 8 7)) ((0 1 2) (3 4 5) (6 7 8))) 3)
