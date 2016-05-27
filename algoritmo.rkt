@@ -160,7 +160,36 @@
 )
 ;_________________________________________________________________
 
+; Função que retorna os possíveis sucessores
+(define (sucessores tabuleiro tamanho)
+    (append
+        (sucessorDireita tabuleiro tamanho (- (posicaoVazia tabuleiro tamanho) 1) (posicaoVazia tabuleiro tamanho))
+        (sucessorEsquerda tabuleiro tamanho (+ (posicaoVazia tabuleiro tamanho) 1) (posicaoVazia tabuleiro tamanho))
+        (sucessorY tabuleiro tamanho (- (posicaoVazia tabuleiro tamanho) tamanho) (posicaoVazia tabuleiro tamanho))
+        (sucessorY tabuleiro tamanho (+ (posicaoVazia tabuleiro tamanho) tamanho) (posicaoVazia tabuleiro tamanho))
+    )
+)
+
+(define (sucessorY tabuleiro tamanho indice indiceVazio)
+    (if (or (>= indice (* tamanho tamanho)) (< indice 0))
+        null
+        (list (movimenta tabuleiro tamanho indice indiceVazio))
+    )
+)
+
+(define (sucessorDireita tabuleiro tamanho indice indiceVazio)
+    (if (= (remainder (+ indice 1) tamanho) 0)
+        null
+        (list (movimenta tabuleiro tamanho indice indiceVazio))
+    )
+)
+
+(define (sucessorEsquerda tabuleiro tamanho indice indiceVazio)
+    (if (= (remainder indice tamanho) 0)
+        null
+        (list (movimenta tabuleiro tamanho indice indiceVazio))
+    )
+)
+;_________________________________________________________________
 ; Main
-(busca '((0 1 2) (3 4 5) (6 7 8)) 3)
-(busca '((0 1 2 3) (4 5 6 7) (8 9 10 11) (12 13 14 15)) 4)
-(busca '((0 1 2 3 4) (5 6 7 8 9) (10 11 12 13 14) (15 16 17 18 19) (20 21 22 23 24)) 5)
+;(sucessores '((2 1 0) (3 4 5) (6 7 8)) 3)
