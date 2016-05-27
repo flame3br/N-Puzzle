@@ -9,9 +9,9 @@
 
 ; Função que realiza o algoritmo.
 (define (busca tabuleiro tamanho)
-    ;(imprime tabuleiro)
+    (imprime tabuleiro)
     ;(pecasErradas tabuleiro tamanho)
-    (movimenta tabuleiro tamanho 4 (posicaoVazia tabuleiro tamanho))
+    ;(movimenta tabuleiro tamanho 4 (posicaoVazia tabuleiro tamanho))
 )
 ;_________________________________________________________________
 
@@ -126,7 +126,13 @@
 
 ; Função que escolhe um sucessor de acordo com a heurística
 (define (escolheSucessor tabuleiros tamanho)
-    (sucessorIndice tabuleiros (indiceMenorValor (calculaSucessores tabuleiros tamanho) (car (calculaSucessores tabuleiros tamanho))))
+    (sucessorIndice
+        tabuleiros
+        (indiceMenorValor
+            (calculaSucessores tabuleiros tamanho)
+            (car (calculaSucessores tabuleiros tamanho))
+        )
+    )
 )
 
 (define (calculaSucessores tabuleiros tamanho)
@@ -155,7 +161,6 @@
 ;_________________________________________________________________
 
 ; Main
-;(busca '((0 1 2) (3 4 5) (6 7 8)) 3)
-;(busca '((0 1 2 3) (4 5 6 7) (8 9 10 11) (12 13 14 15)) 4)
-;(busca '((0 1 2 3 4) (5 6 7 8 9) (10 11 12 13 14) (15 16 17 18 19) (20 21 22 23 24)) 5)
-(escolheSucessor '(((0 1 2) (5 4 3) (6 7 8)) ((2 4 6) (0 1 3) (5 8 7)) ((0 1 2) (3 4 5) (6 7 8))) 3)
+(busca '((0 1 2) (3 4 5) (6 7 8)) 3)
+(busca '((0 1 2 3) (4 5 6 7) (8 9 10 11) (12 13 14 15)) 4)
+(busca '((0 1 2 3 4) (5 6 7 8 9) (10 11 12 13 14) (15 16 17 18 19) (20 21 22 23 24)) 5)
