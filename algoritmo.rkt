@@ -7,9 +7,43 @@
 
 ;_________________________________________________________________
 
+; Função que lê o valor do usuário.
+(define (lePrompt prompt)
+    (display prompt)
+    (string->number (read-line))
+)
+;_________________________________________________________________
+
+; Função incial do jogo.
+(define (jogar)    
+    (let ((tamanho (lePrompt "Tamanho do Tabuleiro: ")))
+        (jogo (geraTabuleiro tamanho) tamanho)
+    )
+)
+;_________________________________________________________________
+
 ; Função que realiza o jogo.
-(define (jogo tabuleiro tamanho)
-    (imprime tabuleiro)
+(define (jogo tabuleiro tamanho [jogador? true])
+    (if (estadoFinal tabuleiro tamanho)
+        (display "Jogo Finalizado!")
+        (and (imprime tabuleiro)
+            (if jogador?
+                (jogo (jogada tabuleiro tamanho (lePrompt "Peça a ser movida: ")) tamanho false)
+                (and (display "Movimento do Computador:\n") ((jogo (escolheSucessor (sucessores tabuleiro tamanho) tamanho) tamanho true)))
+            )
+        )
+    )
+)
+
+(define (jogada tabuleiro tamanho valor)
+    (movimenta tabuleiro tamanho (indiceValor tabuleiro tamanho valor) (posicaoVazia tabuleiro tamanho))
+)
+
+(define (estadoFinal tabuleiro tamanho)
+    (if (= (pecasErradas tabuleiro tamanho) 0)
+        true
+        false
+    )
 )
 ;_________________________________________________________________
 
@@ -248,5 +282,6 @@
     )
 )
 ;_________________________________________________________________
+
 ; Main
-(imprime (geraTabuleiro 3))
+(jogar)
