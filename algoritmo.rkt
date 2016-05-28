@@ -53,7 +53,7 @@
 ; Função para somente o jogador jogar.
 (define (jogarSomenteJogador tabuleiro tamanho)
     (if (estadoFinal tabuleiro tamanho)
-        (display "***Jogo Finalizado!***")
+        ((lambda () (imprime tabuleiro) (display "***Jogo Finalizado!***\n")))
         (and (imprime tabuleiro)
             (jogarSomenteJogador (jogada tabuleiro tamanho (lePrompt "~Peça a ser movida: ")) tamanho)
         )
