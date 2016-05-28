@@ -28,7 +28,7 @@
 ; Função que realiza o jogo.
 (define (jogo tabuleiro tamanho [jogador? true])
     (if (estadoFinal tabuleiro tamanho)
-        (display "***Jogo Finalizado!***")
+        (display "***Jogo Finalizado!***\n")
         (and (imprime tabuleiro)
             (if jogador?
                 (jogo (jogada tabuleiro tamanho (lePrompt "~Peça a ser movida: ")) tamanho false)
@@ -76,7 +76,7 @@
     (if (null? linha)
         true
         (and
-            (and (display (car linha)) (display " "))
+            (and (display (car linha)) (display "  "))
             (imprimeLinha (cdr linha))
         )
     )
