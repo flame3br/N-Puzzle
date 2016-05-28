@@ -15,9 +15,12 @@
 ;_________________________________________________________________
 
 ; Função incial do jogo.
-(define (jogar)    
+(define (jogar computador?)
     (let ((tamanho (lePrompt "Tamanho do Tabuleiro: ")))
-        (jogo (geraTabuleiro tamanho) tamanho)
+        (if (= computador? 1)
+            (jogo (geraTabuleiro tamanho) tamanho)
+            (jogarSomenteJogador (geraTabuleiro tamanho) tamanho)
+        )
     )
 )
 ;_________________________________________________________________
@@ -25,11 +28,11 @@
 ; Função que realiza o jogo.
 (define (jogo tabuleiro tamanho [jogador? true])
     (if (estadoFinal tabuleiro tamanho)
-        (display "Jogo Finalizado!")
+        (display "***Jogo Finalizado!***")
         (and (imprime tabuleiro)
             (if jogador?
-                (jogo (jogada tabuleiro tamanho (lePrompt "Peça a ser movida: ")) tamanho false)
-                (and (display "Movimento do Computador:\n") ((jogo (escolheSucessor (sucessores tabuleiro tamanho) tamanho) tamanho true)))
+                (jogo (jogada tabuleiro tamanho (lePrompt "~Peça a ser movida: ")) tamanho false)
+                (and (display "-Movimento do Computador:\n") ((jogo (escolheSucessor (sucessores tabuleiro tamanho) tamanho) tamanho true)))
             )
         )
     )
@@ -43,6 +46,17 @@
     (if (= (pecasErradas tabuleiro tamanho) 0)
         true
         false
+    )
+)
+;_________________________________________________________________
+
+; Função para somente o jogador jogar.
+(define (jogarSomenteJogador tabuleiro tamanho)
+    (if (estadoFinal tabuleiro tamanho)
+        (display "***Jogo Finalizado!***")
+        (and (imprime tabuleiro)
+            (jogarSomenteJogador (jogada tabuleiro tamanho (lePrompt "~Peça a ser movida: ")) tamanho)
+        )
     )
 )
 ;_________________________________________________________________
@@ -284,4 +298,4 @@
 ;_________________________________________________________________
 
 ; Main
-(jogar)
+(jogar (lePrompt "Jogar com o PC? 1(Sim) 0(Não): "))
