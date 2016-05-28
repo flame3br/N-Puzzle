@@ -32,7 +32,7 @@
         (and (imprime tabuleiro)
             (if jogador?
                 (jogo (jogada tabuleiro tamanho (lePrompt "~Peça a ser movida: ")) tamanho false)
-                (and (display "-Movimento do Computador:\n") ((jogo (escolheSucessor (sucessores tabuleiro tamanho) tamanho) tamanho true)))
+                ((lambda () (display "-Movimento do Computador:\n") (jogo (escolheSucessor (sucessores tabuleiro tamanho) tamanho) tamanho true)))
             )
         )
     )
