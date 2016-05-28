@@ -201,7 +201,29 @@
 
 ; Função que cria um tabuleiro aleatório
 (define (geraTabuleiro tamanho)
-    (random (* tamanho tamanho))
+    (geraMatriz (geraVetor tamanho) tamanho)
+)
+
+(define (geraMatriz vetor tamanho [tabuleiro '()] [linha '()] [i 0])
+    (if (null? vetor)
+        (append (list linha) tabuleiro)
+        (if (and (= (remainder i tamanho) 0) (> i 0))
+            (geraMatriz (cdr vetor) tamanho (append (list linha) tabuleiro) (cons (car vetor) '()) (+ i 1))
+            (geraMatriz (cdr vetor) tamanho tabuleiro (cons (car vetor) linha) (+ i 1))
+        )
+    )
+)
+
+(define (geraVetor tamanho [quantidade 0] [vetor '()])
+    (if (= quantidade (* tamanho tamanho))
+        vetor
+        (let ((valor (random (* tamanho tamanho))))
+            (if (>= (indiceValorLinha vetor valor 0) 0)
+                (geraVetor tamanho quantidade vetor)
+                (geraVetor tamanho (+ quantidade 1) (append (list valor) vetor))
+            )
+        )
+    )
 )
 ;_________________________________________________________________
 
@@ -227,4 +249,4 @@
 )
 ;_________________________________________________________________
 ; Main
-;(geraTabuleiro 3)
+(imprime (geraTabuleiro 3))
