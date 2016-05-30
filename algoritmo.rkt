@@ -5,6 +5,22 @@
 ;;; Data: 01/06/2016
 #lang racket
 
+; (lePrompt prompt)                                 Função que lê o valor do usuário.
+; (jogar computador?)                               Função incial do jogo.
+; (jogo tabuleiro tamanho)                          Função que realiza o jogo.
+; (jogoJogador tabuleiro tamanho)                   Função para somente o jogador jogar.
+; (imprime tabuleiro)                               Função para imprimir um tabuleiro.
+; (imprimeTabuleiros tabuleiros)                    Função para imprimir lista de tabuleiros
+; (posicaoVazia tabuleiro tamanho)                  Função que retorna o índice da posição vazia.
+; (pecasErradas tabuleiro tamanho)                  Função que retorna a quantidade de peças erradas (heurística).
+; (movimenta tabuleiro tamanho indice vazia)        Função que retorna um tabuleiro com um movimento realizado.
+; (setValorIndice tabuleiro tamanho indice valor)   Função que retorna um tabuleiro com um valor setado em uma possição.
+; (valorIndice tabuleiro tamanho indice)            Função que retorna o valor de um índice.
+; (escolheSucessor tabuleiros tamanho)              Função que escolhe um sucessor de acordo com a heurística
+; (sucessores tabuleiro tamanho)                    Função que retorna os possíveis sucessores
+; (geraTabuleiro tamanho)                           Função que cria um tabuleiro aleatório
+; (indiceValor tabuleiro tamanho valor)             Função que retorna um índice de um valor
+
 ;_________________________________________________________________
 
 ; Função que lê o valor do usuário.
@@ -19,7 +35,7 @@
     (let ((tamanho (lePrompt "Tamanho do Tabuleiro: ")))
         (if (= computador? 1)
             (jogo (geraTabuleiro tamanho) tamanho)
-            (jogarSomenteJogador (geraTabuleiro tamanho) tamanho)
+            (jogoJogador (geraTabuleiro tamanho) tamanho)
         )
     )
 )
@@ -51,11 +67,11 @@
 ;_________________________________________________________________
 
 ; Função para somente o jogador jogar.
-(define (jogarSomenteJogador tabuleiro tamanho)
+(define (jogoJogador tabuleiro tamanho)
     (if (estadoFinal tabuleiro tamanho)
         ((lambda () (imprime tabuleiro) (display "***Jogo Finalizado!***\n")))
         (and (imprime tabuleiro)
-            (jogarSomenteJogador (jogada tabuleiro tamanho (lePrompt "~Peça a ser movida: ")) tamanho)
+            (jogoJogador (jogada tabuleiro tamanho (lePrompt "~Peça a ser movida: ")) tamanho)
         )
     )
 )
