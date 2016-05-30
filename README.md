@@ -1,2 +1,4 @@
 # N-Puzzle
-Trabalho Linguagens de Programação UTFPR-CM 2016/1
+Implementação em Racket do jogo N-puzzle.
+
+Heurística utilizada pelo computador: Número de peças erradas.
