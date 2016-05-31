@@ -5,22 +5,6 @@
 ;;; Data: 01/06/2016
 #lang racket
 
-; (lePrompt prompt)                                 Função que lê o valor do usuário.
-; (jogar computador?)                               Função incial do jogo.
-; (jogo tabuleiro tamanho)                          Função que realiza o jogo.
-; (jogoJogador tabuleiro tamanho)                   Função para somente o jogador jogar.
-; (imprime tabuleiro)                               Função para imprimir um tabuleiro.
-; (imprimeTabuleiros tabuleiros)                    Função para imprimir lista de tabuleiros
-; (posicaoVazia tabuleiro tamanho)                  Função que retorna o índice da posição vazia.
-; (pecasErradas tabuleiro tamanho)                  Função que retorna a quantidade de peças erradas (heurística).
-; (movimenta tabuleiro tamanho indice vazia)        Função que retorna um tabuleiro com um movimento realizado.
-; (setValorIndice tabuleiro tamanho indice valor)   Função que retorna um tabuleiro com um valor setado em uma possição.
-; (valorIndice tabuleiro tamanho indice)            Função que retorna o valor de um índice.
-; (escolheSucessor tabuleiros tamanho)              Função que escolhe um sucessor de acordo com a heurística
-; (sucessores tabuleiro tamanho)                    Função que retorna os possíveis sucessores
-; (geraTabuleiro tamanho)                           Função que cria um tabuleiro aleatório
-; (indiceValor tabuleiro tamanho valor)             Função que retorna um índice de um valor
-
 ;_________________________________________________________________
 
 ; Função que lê o valor do usuário.
@@ -42,13 +26,13 @@
 ;_________________________________________________________________
 
 ; Função que realiza o jogo.
-(define (jogo tabuleiro tamanho [jogador? true])
+(define (jogo tabuleiro tamanho [jogador? true] [ultimoTabuleiro '()])
     (if (estadoFinal tabuleiro tamanho)
         ((lambda () (imprime tabuleiro) (display "***Jogo Finalizado!***\n")))
         (and (imprime tabuleiro)
             (if jogador?
-                (jogo (jogada tabuleiro tamanho (lePrompt "~Peça a ser movida: ")) tamanho false)
-                ((lambda () (display "-Movimento do Computador:\n") (jogo (escolheSucessor (sucessores tabuleiro tamanho) tamanho) tamanho true)))
+                (jogo (jogada tabuleiro tamanho (lePrompt "~Peça a ser movida: ")) tamanho false tabuleiro)
+                ((lambda () (display "-Movimento do Computador:\n") (jogo (escolheSucessor (sucessores tabuleiro tamanho ultimoTabuleiro) tamanho) tamanho true)))
             )
         )
     )
@@ -232,33 +216,42 @@
 ;_________________________________________________________________
 
 ; Função que retorna os possíveis sucessores
-(define (sucessores tabuleiro tamanho)
+(define (sucessores tabuleiro tamanho ultimoTabuleiro)
     (append
-        (sucessorDireita tabuleiro tamanho (- (posicaoVazia tabuleiro tamanho) 1) (posicaoVazia tabuleiro tamanho))
-        (sucessorEsquerda tabuleiro tamanho (+ (posicaoVazia tabuleiro tamanho) 1) (posicaoVazia tabuleiro tamanho))
-        (sucessorY tabuleiro tamanho (- (posicaoVazia tabuleiro tamanho) tamanho) (posicaoVazia tabuleiro tamanho))
-        (sucessorY tabuleiro tamanho (+ (posicaoVazia tabuleiro tamanho) tamanho) (posicaoVazia tabuleiro tamanho))
+        (sucessorDireita tabuleiro tamanho (- (posicaoVazia tabuleiro tamanho) 1) (posicaoVazia tabuleiro tamanho) ultimoTabuleiro)
+        (sucessorEsquerda tabuleiro tamanho (+ (posicaoVazia tabuleiro tamanho) 1) (posicaoVazia tabuleiro tamanho) ultimoTabuleiro)
+        (sucessorY tabuleiro tamanho (- (posicaoVazia tabuleiro tamanho) tamanho) (posicaoVazia tabuleiro tamanho) ultimoTabuleiro)
+        (sucessorY tabuleiro tamanho (+ (posicaoVazia tabuleiro tamanho) tamanho) (posicaoVazia tabuleiro tamanho) ultimoTabuleiro)
     )
 )
 
-(define (sucessorY tabuleiro tamanho indice indiceVazio)
+(define (sucessorY tabuleiro tamanho indice indiceVazio ultimoTabuleiro)
     (if (or (>= indice (* tamanho tamanho)) (< indice 0))
         null
-        (list (movimenta tabuleiro tamanho indice indiceVazio))
+        (if (saoIguais? (movimenta tabuleiro tamanho indice indiceVazio) ultimoTabuleiro)            
+            null
+            (list (movimenta tabuleiro tamanho indice indiceVazio))
+        )
     )
 )
 
-(define (sucessorDireita tabuleiro tamanho indice indiceVazio)
+(define (sucessorDireita tabuleiro tamanho indice indiceVazio ultimoTabuleiro)
     (if (= (remainder (+ indice 1) tamanho) 0)
         null
-        (list (movimenta tabuleiro tamanho indice indiceVazio))
+        (if (saoIguais? (movimenta tabuleiro tamanho indice indiceVazio) ultimoTabuleiro)            
+            null
+            (list (movimenta tabuleiro tamanho indice indiceVazio))
+        )
     )
 )
 
-(define (sucessorEsquerda tabuleiro tamanho indice indiceVazio)
+(define (sucessorEsquerda tabuleiro tamanho indice indiceVazio ultimoTabuleiro)
     (if (= (remainder indice tamanho) 0)
         null
-        (list (movimenta tabuleiro tamanho indice indiceVazio))
+        (if (saoIguais? (movimenta tabuleiro tamanho indice indiceVazio) ultimoTabuleiro)            
+            null
+            (list (movimenta tabuleiro tamanho indice indiceVazio))
+        )
     )
 )
 ;_________________________________________________________________
@@ -308,6 +301,28 @@
         (if (= valor (car linha))
             i
             (indiceValorLinha (cdr linha) valor (+ i 1))
+        )
+    )
+)
+;_________________________________________________________________
+
+; Função que verifica se dois tabuleiros são iguais.
+(define (saoIguais? tabuleiro1 tabuleiro2)
+    (if (and (null? tabuleiro1) (null? tabuleiro2))
+        true
+        (if (saoIguaisLinha? (car tabuleiro1) (car tabuleiro2))
+            (saoIguais? (cdr tabuleiro1) (cdr tabuleiro2))
+            false
+        )
+    )
+)
+
+(define (saoIguaisLinha? linha1 linha2)
+    (if (and (null? linha1) (null? linha2))
+        true
+        (if (= (car linha1) (car linha2))
+            (saoIguaisLinha? (cdr linha1) (cdr linha2))
+            false
         )
     )
 )
