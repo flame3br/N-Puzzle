@@ -83,15 +83,6 @@
 )
 ;_________________________________________________________________
 
-; Função para imprimir lista de tabuleiros
-(define (imprimeTabuleiros tabuleiros)
-    (if (null? tabuleiros)
-        null
-        (and (and (imprime (car tabuleiros)) (display "\n")) (imprimeTabuleiros (cdr tabuleiros)))
-    )
-)
-;_________________________________________________________________
-
 ; Função que retorna o índice da posição vazia.
 (define (posicaoVazia tabuleiro tamanho [i 0])
     (if (>= (contemPosicaoVazia (car tabuleiro) i) 0)
