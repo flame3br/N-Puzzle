@@ -76,7 +76,7 @@
     (if (null? linha)
         true
         (and
-            (and (display (car linha)) (display "  "))
+            (and (display (car linha)) (display "\t"))
             (imprimeLinha (cdr linha))
         )
     )
